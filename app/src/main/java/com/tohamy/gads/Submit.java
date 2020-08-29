@@ -126,7 +126,7 @@ public class Submit extends AppCompatActivity implements View.OnClickListener {
             @Override
             public void onClick(View view) {
             SendData();
-
+                dialog.hide();
             }
         });
 
