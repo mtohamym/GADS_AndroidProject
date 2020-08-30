@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -30,6 +31,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class SkillFragment extends Fragment {
     RecyclerView recyclerView;
     SkillIqAdapter adapter;
+    ProgressBar progressBar;
 
     @Override
     public void onAttach(@NonNull Activity activity) {
@@ -47,6 +49,7 @@ public class SkillFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.skilliq_tap, container, false);
         recyclerView = (RecyclerView)view.findViewById(R.id.skillIqrec);
+        progressBar = (ProgressBar)view.findViewById(R.id.loadingSkill);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL));
@@ -62,7 +65,7 @@ public class SkillFragment extends Fragment {
 
     public void getAllLearningleaders (){
 
-
+        progressBar.setVisibility(View.VISIBLE);
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(Common.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -78,13 +81,14 @@ public class SkillFragment extends Fragment {
                     List<SkillIq> iqList = response.body();
                     adapter.setSkill(iqList);
                     recyclerView.setAdapter(adapter);
+                    progressBar.setVisibility(View.INVISIBLE);
 
                 }
             }
 
             @Override
             public void onFailure(Call<List<SkillIq>> call, Throwable t) {
-
+                getAllLearningleaders ();
             }
         }) ;
 
