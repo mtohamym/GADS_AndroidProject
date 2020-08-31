@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,10 +13,11 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.airbnb.lottie.LottieAnimationView;
+import com.tohamy.gads.Model.SkillIq;
 import com.tohamy.gads.R;
 import com.tohamy.gads.adapter.SkillIqAdapter;
 import com.tohamy.gads.data.Common;
-import com.tohamy.gads.Model.SkillIq;
 import com.tohamy.gads.data.UserInterface;
 
 import java.util.List;
@@ -31,7 +31,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class SkillFragment extends Fragment {
     RecyclerView recyclerView;
     SkillIqAdapter adapter;
-    ProgressBar progressBar;
+    LottieAnimationView load;
+
 
     @Override
     public void onAttach(@NonNull Activity activity) {
@@ -39,8 +40,7 @@ public class SkillFragment extends Fragment {
     }
 
     public static SkillFragment getInstance() {
-        SkillFragment skillFragment = new SkillFragment();
-        return skillFragment;
+        return new SkillFragment();
     }
     
 
@@ -49,7 +49,7 @@ public class SkillFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.skilliq_tap, container, false);
         recyclerView = (RecyclerView)view.findViewById(R.id.skillIqrec);
-        progressBar = (ProgressBar)view.findViewById(R.id.loadingSkill);
+        load = view.findViewById(R.id.loadingSkill);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL));
@@ -65,7 +65,7 @@ public class SkillFragment extends Fragment {
 
     public void getAllLearningleaders (){
 
-        progressBar.setVisibility(View.VISIBLE);
+        load.setVisibility(View.VISIBLE);
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(Common.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -81,7 +81,7 @@ public class SkillFragment extends Fragment {
                     List<SkillIq> iqList = response.body();
                     adapter.setSkill(iqList);
                     recyclerView.setAdapter(adapter);
-                    progressBar.setVisibility(View.INVISIBLE);
+                    load.setVisibility(View.INVISIBLE);
 
                 }
             }
